@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="../static/js/books.js"></script>
+
+		<script>
+
+			$(document).ready(function() {
+				books.handle_logout_button_click();
+				books.handle_new_notebook_button_click();
+				books.handle_session_button_click();
+				books.handle_count_button_click();
+				books.handle_get_notebooks_button_click();
+				books.handle_delete_button_click();
+				books.handle_add_note_button_click();
+			})
+
+		</script>
+
+	</head>
+
+	<body>
+		<button id="logout-button">LOGOUT</button>
+		<button id="new-notebook-button">New Notebook</button>
+		<button id="session-button">Session</button>
+		<button id="count-button">Count</button>
+		<button id="get-notebooks-button">Get Notebooks</button>
+		<button id="delete-button">Delete</button>
+		<button id="add-note-button">Add Note</button>
+		<hr>
+		<input type="text" id="id-input">
+		<hr>
+		<input type="text" id="note-body">
+	</body>
+
+</html>
