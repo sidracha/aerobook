@@ -1,5 +1,20 @@
 var books = {
 
+	limit: 500,
+	offset: 0,
+
+	escape_html: function(unsafe) {
+
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    },
+
+	
+
 	handle_logout_button_click: function () {
 		$("#logout-button")[0].onclick = function (e) {
 			window.location.href = ("/logout");
@@ -68,25 +83,4 @@ var books = {
 			})
 		}
 	},
-	
-	handle_add_note_button_click: function () {
-		$("#add-note-button")[0].onclick = function (e) {
-			console.log("here")
-			const notebook_id = $("#id-input")[0].value
-			const body = $("#note-body")[0].value
-			
-			$.ajax({
-				url: "/notebook/" + notebook_id + "/note",
-				method: "POST",
-				data: JSON.stringify({
-					body: body
-				}),
-				success: function (resp){
-					console.log(resp)
-				}
-			})
-			
-		}
-	}
-
 }

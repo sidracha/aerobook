@@ -1,33 +1,68 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 
 <html>
-
-	<head>
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		<script src="../static/js/notebook.js"></script>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../static/js/notebook.js"></script>
+        <link href="../static/css/notebook.css" rel="stylesheet" type="text/css"/>
 
 		<script>
 
-			$(document).ready(function() {
-
-
-
+			$(document).ready(function () {
+				notebook.on_initial();
+				notebook.handle_new_note_button_click();
+				notebook.handle_next_page_button_click();
+				notebook.handle_previous_page_button_click();
+				notebook.handle_delete_button_click();
 			})
 
 		</script>
+    </head>
 
-	</head>
+    <body>
 
-	<body id="body">
+		<div class="add-note-div">
+            <div id="text-box-div">
+                <textarea id="note-field"></textarea>
+            </div>
+            <div id="new-note-button-div">
+                <button id="new-note-button">Add Note</button>
+            </div>
+        </div>
 
-		<div id="text-box-and-button">
-
-
+		<div id="all-notes-div">
+			<!--
+			<div class="note-div">
+				<div class="note-text-div">
+					<p class="note-body">note body</p>
+				</div>
+				<div class="delete-note-button-div">
+					<button class="delete-note-button">Delete Note</button>
+				</div>
+			</div>
+			-->
 			
 		</div>
 
+		<div id="nav-div">
+			<div id="nav-button-div">
 
-	</body>
+				<button id="previous-page-button">⟵</button>
+				<button id="next-page-button">⟶</button>
+
+			</div>
+			
+			<div>
+
+				<p id="page-num"></p>
+
+			</div>
+
+
+		</div>
+        
+    </body>
+
 
 
 </html>
