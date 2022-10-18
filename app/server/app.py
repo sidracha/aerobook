@@ -107,7 +107,7 @@ def handle_note_delete(notebook_id, note_id):
 
 @app.route("/display/<notebook_id>")
 @login_required
-<<<<<<< HEAD
+
 def handle_display_nbid(notebook_id):
 
 	#check if notebook exists otherwise redirect
@@ -124,12 +124,11 @@ def handle_notfound():
 def handle_count_notes(notebook_id):
 	count = notes.get_note_count(notebook_id)
 	return jsonify({"count": count})
-=======
+	
 def handle_display_nbid():
 	return render_template("notebook.html")
 
 
->>>>>>> parent of 72a3d1f (notebook page)
 
 
 
