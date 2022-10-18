@@ -1,6 +1,6 @@
 var notebook = {
 
-	limit: 20,
+	limit: 2,
 	offset: 0,
 	last_page: 0,
 	current_page: 0,
@@ -32,16 +32,28 @@ var notebook = {
 
 	on_initial: async function () {
 		
-		this.get_and_display_notes(this.limit, 0)
+		//this.get_and_display_notes(this.limit, 0)
 
-		const resp = await notebook.get_note_count()
-		this.last_page = parseInt(Math.ceil(resp.count/this.limit))
-		notebook.modify_page_num("1", this.last_page+1)
+		//const resp = await notebook.get_note_count()
+		//this.last_page = parseInt(Math.ceil(resp.count/this.limit))
+		//if (resp.count === 0) {
+			//this.last_page = 1
+		//}
+		//notebook.modify_page_num("1", this.last_page)
+		notebook.go_to_page(0);
+		const resp = await notebook.get_note_count();
+		notebook.last_page = parseInt(Math.ceil(resp.count/notebook.limit))
+		if (resp.count === 0) {
+			console.log("here")
+			notebook.last_page = 1
+		}
 		
+		notebook.modify_page_num("1", notebook.last_page)
 		
 		//console.log(count)
 		
 	},
+
 
 	get_and_display_notes: function (limit, offset) {
 		$.ajax({
@@ -50,7 +62,6 @@ var notebook = {
 		}).done(function (resp) {
 			for (let i=0; i < resp.notes.length; i++) {
 				const note_div = notebook.create_note_element(resp.notes[i].note_id, resp.notes[i].body);
-				console.log(note_div);
 				note_div.appendTo($("#all-notes-div")[0]);
 			}
 		})
@@ -63,6 +74,7 @@ var notebook = {
 			dataType: "json",
 			data: JSON.stringify({body: body}),
 			success: function (resp) {
+				console.log("heregge")
 				const note_id = resp.note_id;
 				const body = resp.body;
 				note_div = notebook.create_note_element(note_id, body)
@@ -97,11 +109,19 @@ var notebook = {
 	handle_new_note_button_click: function () {
 		$("#new-note-button")[0].onclick = function (e) {
 			const body = $("#note-field")[0].value
-			console.log(body)
 			if (body.trim().length === 0) {
 				return;
 			}
 			notebook.add_note(body)
+			$.ajax({
+				url: "/notebook/" + notebook.parse_notebook_id() + "/count",
+				method: "GET"
+			}).done(function (resp) {
+				const count = resp.count
+				notebook.last_page = Math.ceil((resp.count/notebook.limit))
+				notebook.go_to_page(0)
+				notebook.modify_page_num(1, notebook.last_page)
+			})
 		}
 	
 	},
@@ -111,6 +131,7 @@ var notebook = {
 		notebook.offset = notebook.limit * page
 		$(".note-div").remove()
 		notebook.get_and_display_notes(notebook.limit, notebook.offset)
+		notebook.modify_page_num(notebook.current_page, notebook.last_page)
 	},
 
 	handle_next_page_button_click: function () {
@@ -150,6 +171,7 @@ var notebook = {
 	},
 
 	modify_page_num: function (current, last) {
+		console.log("here", last)
 		const inner = current + " of " + last;
 		console.log(inner)
 		$("#page-num").html(inner);

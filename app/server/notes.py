@@ -3,8 +3,16 @@ from flask import jsonify
 
 from models import Note
 from models import db
+import notebooks
+
+
 
 def create_new_note(user_id, notebook_id, body):
+
+	#need to check if notebook exists
+	if notebooks.check_if_notebook_exists(notebook_id) == False:
+		return
+
 	note_id = str(uuid4())
 	new_note = Note(note_id=note_id, user_id=user_id, notebook_id=notebook_id, body=body)
 	db.session.add(new_note)

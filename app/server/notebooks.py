@@ -42,3 +42,6 @@ def delete_notebook(notebook_id):
 
 	Notebook.query.filter_by(notebook_id=notebook_id).delete()
 	db.session.commit()
+
+def check_if_notebook_exists(notebook_id):
+	return bool(Notebook.query.filter_by(notebook_id=notebook_id).first())

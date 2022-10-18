@@ -119,13 +119,24 @@ def handle_note_delete(notebook_id, note_id):
 @app.route("/display/<notebook_id>")
 @login_required
 def handle_display_nbid(notebook_id):
+
+	#check if notebook exists otherwise redirect
+	if notebooks.check_if_notebook_exists(notebook_id) == False:
+		return redirect("/display/notfound")
 	return render_template("notebook.html")
+
+@app.route("/display/notfound")
+def handle_notfound():
+	return render_template("notfound.html")
 
 @app.route("/notebook/<notebook_id>/count")
 @login_required
 def handle_count_notes(notebook_id):
 	count = notes.get_note_count(notebook_id)
 	return jsonify({"count": count})
+
+
+
 
 @app.route("/session")
 @login_required
