@@ -74,10 +74,7 @@ def handle_notebook_post(name):
 @login_required
 def handle_notebooks_get():
 	user_id = session["profile"]["user_id"]
-	args = request.args
-	limit = int(args["limit"])
-	offset = int(args["offset"])
-	notebooks_arr = notebooks.get_notebooks(user_id, limit, offset)
+	notebooks_arr = notebooks.get_all_notebooks(user_id)
 
 	return jsonify({"notebooks": notebooks_arr})
 
@@ -91,23 +88,15 @@ def handle_notebook_delete(notebook_id):
 @app.route("/notebook/<notebook_id>/note", methods=["POST"])
 @login_required
 def handle_note_post(notebook_id):
-	print("here")
 	user_id = session["profile"]["user_id"]
-	data = request.get_json(force=True)
-	body = data["body"]
-	note_obj = notes.create_new_note(user_id, notebook_id, body)
-	
-	return note_obj
+	body = request.json
+	body = body["body"]
+	return notes.create_new_note(user_id, notebook_id, body)
 
 @app.route("/notebook/<notebook_id>/notes", methods=["GET"])
 @login_required
 def handle_notes_get(notebook_id):
-	args = request.args
-	limit = int(args["limit"])
-	offset = int(args["offset"])
-	notes_arr = notes.get_notes(notebook_id, limit, offset)
-	
-	return jsonify({"notes": notes_arr})
+	return notes.get_all_notes(notebook_id)
 
 @app.route("/notebook/<notebook_id>/note/<note_id>", methods=["DELETE"])
 @login_required
@@ -118,6 +107,7 @@ def handle_note_delete(notebook_id, note_id):
 
 @app.route("/display/<notebook_id>")
 @login_required
+<<<<<<< HEAD
 def handle_display_nbid(notebook_id):
 
 	#check if notebook exists otherwise redirect
@@ -134,6 +124,12 @@ def handle_notfound():
 def handle_count_notes(notebook_id):
 	count = notes.get_note_count(notebook_id)
 	return jsonify({"count": count})
+=======
+def handle_display_nbid():
+	return render_template("notebook.html")
+
+
+>>>>>>> parent of 72a3d1f (notebook page)
 
 
 

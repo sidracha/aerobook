@@ -27,9 +27,9 @@ def create_new_notebook(user_id, name, max_notebooks):
 	db.session.commit()
 	return jsonify({"notebook_id": new_notebook.notebook_id, "name": new_notebook.name})
 
-def get_notebooks(user_id, limit, offset):
+def get_all_notebooks(user_id):
 
-	notebooks = Notebook.query.filter_by(user_id=user_id).order_by(Notebook.created).limit(limit).offset(offset)
+	notebooks = Notebook.query.filter_by(user_id=user_id).order_by(Notebook.created).all()
 	notebooks_arr = []
 	for notebook in notebooks:
 		obj = {"notebook_id": notebook.notebook_id, "name": notebook.name}

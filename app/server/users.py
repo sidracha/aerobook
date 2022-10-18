@@ -18,4 +18,5 @@ def create_user(email):
 
 def delete_user(email):
 	user = User.query.filter_by(email=email).delete()
+
 	db.session.commit()

@@ -1,5 +1,6 @@
 var books = {
 
+<<<<<<< HEAD
 	limit: 5000,
 	offset: 0,
 
@@ -22,6 +23,12 @@ var books = {
 		return notebook_anchor
 
 		
+=======
+	handle_logout_button_click: function () {
+		$("#logout-button")[0].onclick = function (e) {
+			window.location.href = ("/logout");
+		}
+>>>>>>> parent of 72a3d1f (notebook page)
 	},
 
 
@@ -48,4 +55,40 @@ var books = {
 	
 
 
+<<<<<<< HEAD
+=======
+	handle_delete_button_click: function () {
+		$("#delete-button")[0].onclick = function (e) {
+			const notebook_id = $("#id-input")[0].value
+			$.ajax({
+				url: "/notebook/" + notebook_id,
+				method: "DELETE",
+				success: function (resp) {
+					console.log(resp)
+				}
+			})
+		}
+	},
+	
+	handle_add_note_button_click: function () {
+		$("#add-note-button")[0].onclick = function (e) {
+			console.log("here")
+			const notebook_id = $("#id-input")[0].value
+			const body = $("#note-body")[0].value
+			
+			$.ajax({
+				url: "/notebook/" + notebook_id + "/note",
+				method: "POST",
+				data: JSON.stringify({
+					body: body
+				}),
+				success: function (resp){
+					console.log(resp)
+				}
+			})
+			
+		}
+	}
+
+>>>>>>> parent of 72a3d1f (notebook page)
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var notebook = {
 
 	limit: 2,
@@ -178,3 +179,5 @@ var notebook = {
 	},	
 
 }
+=======
+>>>>>>> parent of 72a3d1f (notebook page)
