@@ -45,8 +45,11 @@ def login_required(f):
 import notebooks
 import notes
 
+
 @app.route("/")
 def handle_home():
+	if "profile" in session:
+		return redirect("/display/notebooks")
 	return render_template("home.html")
 
 @app.route("/display/notebooks")
@@ -55,19 +58,24 @@ def handle_display():
 	email = session["profile"]["email"]
 	return render_template("books.html")
 
+@app.route("/user")
+@login_required
+def handle_user():
+	return jsonify({"email": session["profile"]["email"], "profile_pic": session["profile"]["picture"]})
+
 
 @app.route("/notebook/<name>", methods=["POST"])
 @login_required
 def handle_notebook_post(name):
 	user_id = session["profile"]["user_id"]
-	max_notebooks = 1000
+	max_notebooks = 10
 	#max_notebooks = int(os.getenv("MAX_NOTEBOOKS"))
-
+	
 	notebook_obj = notebooks.create_new_notebook(user_id, name, max_notebooks)
 	if bool(notebook_obj) == False:
 		return abort(500, description="Notebook Limit Exceeded")
 
-	return notebook_obj
+	return jsonify(notebook_obj)
 
 
 @app.route("/notebooks", methods=["GET"])
@@ -88,15 +96,21 @@ def handle_notebook_delete(notebook_id):
 @app.route("/notebook/<notebook_id>/note", methods=["POST"])
 @login_required
 def handle_note_post(notebook_id):
+	print("here!!!!!!!!")
 	user_id = session["profile"]["user_id"]
-	body = request.json
+	body = request.get_json(force=True)
 	body = body["body"]
-	return notes.create_new_note(user_id, notebook_id, body)
+	note_obj = notes.create_new_note(user_id, notebook_id, body)
+	count = notes.get_note_count(notebook_id)
+	return jsonify({"note": note_obj, "count": count})
+
 
 @app.route("/notebook/<notebook_id>/notes", methods=["GET"])
 @login_required
 def handle_notes_get(notebook_id):
-	return notes.get_all_notes(notebook_id)
+	args = request.args
+	notes_arr = notes.get_notes(notebook_id, int(args["limit"]), int(args["offset"]))
+	return jsonify({"notes": notes_arr})
 
 @app.route("/notebook/<notebook_id>/note/<note_id>", methods=["DELETE"])
 @login_required
@@ -124,13 +138,13 @@ def handle_notfound():
 def handle_count_notes(notebook_id):
 	count = notes.get_note_count(notebook_id)
 	return jsonify({"count": count})
-	
-def handle_display_nbid():
-	return render_template("notebook.html")
 
-
-
-
+@app.route("/notebook/<notebook_id>/name")
+@login_required
+def handle_notebook_name(notebook_id):
+	name = notebooks.get_name(notebook_id)
+	print("name", name)
+	return jsonify({"name": name})
 
 
 @app.route("/session")

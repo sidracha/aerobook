@@ -5,34 +5,39 @@
 	<head>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="../static/js/books.js"></script>
+		<link href="../static/css/books.css" rel="stylesheet">
 
 		<script>
 
 			$(document).ready(function() {
 				books.handle_logout_button_click();
-				books.get_and_display_notebooks();
+				books.handle_delete_notebook_button_click();
 				books.handle_new_notebook_button_click();
-				books.handle_session_button_click();
-				books.handle_count_button_click();
-				books.handle_get_notebooks_button_click();
-				books.handle_delete_button_click();
-				books.handle_add_note_button_click();
+				books.on_initial();
 			})
 
 		</script>
 
 	</head>
 
-	<body>
-		<div id="logout-button-div">
+	<body id="body">
+		<div id="logout-div">
+			<img id="profile-pic">
+			<p id="email-p"></p>
 			<button id="logout-button">LOGOUT</button>
 		</div>
 
-		<div id="notebooks-div">
-
-
-
+		<div id="button-and-notebooks">
+			<div id="new-notebook-button-div">
+				<button id="new-notebook-button" class="glow-on-hover">New Notebook</button>
+			</div>
+	
+			<div id="notebooks-div">
+	
+			</div>
 		</div>
+
+		
 
 
 	</body>

@@ -1,0 +1,83 @@
+#note-field-and-notes {
+	margin: auto;
+	width: 60%;
+	border: 5px solid #bbbbea;
+	padding: 10px;
+	background-color: #c2dce5;
+	height: fit-content;
+}
+
+#new-note-button {
+	background-color: lightgreen;
+	font-size: 15;
+
+}
+
+#text-box-and-button {
+	margin: auto;
+	position: relative;
+	padding: 0px;
+	text-align: center;
+}
+
+.note-div {
+	text-align: center;
+	padding: 20px;
+}
+
+#nav-cluster-div {
+	text-align: center;
+	padding: 10px;
+
+}
+
+#note-field {
+	width: 500px;
+	height: 150px;
+
+}
+
+#name {
+	text-align: center;
+}
+
+#body {
+	background-color: #e2e2f1;
+}
+
+
+#back-to-notebooks-button-div {
+	text-align: center;
+	padding: 5px;
+}
+
+.delete-note-button {
+	background-color: rgb(217, 103, 103);
+}
+
+
+#logout-div {
+	float: right;
+	height: 10px;
+	width: auto;
+}
+
+#email-p {
+	display: inline-block;
+}
+
+#logout-button {
+	display: inline-block;
+}
+
+#profile-pic {
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+	margin-top: 10px;
+	border-radius: 50%;
+}
+
+#back-to-notebooks-button-div {
+	text-align: left;
+}

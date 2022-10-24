@@ -5,12 +5,20 @@
 	<head>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="../static/js/notebook.js"></script>
+		<link href="../static/css/notebook.css" rel="stylesheet">
 
 		<script>
 
 			$(document).ready(function() {
 
-
+				notebook.on_initial();
+				notebook.handle_next_page_button_click();
+				notebook.handle_previous_page_button_click();
+				notebook.handle_delete_note_button_click();
+				notebook.handle_new_note_button_click();
+				notebook.handle_enter_click();
+				notebook.handle_back_to_notebooks_button_click();
+				notebook.handle_logout_button_click();
 
 			})
 
@@ -20,13 +28,52 @@
 
 	<body id="body">
 
-		<div id="text-box-and-button">
-
-
-			
+		<div id="logout-div">
+			<img id="profile-pic">
+			<p id="email-p"></p>
+			<button id="logout-button">LOGOUT</button>
 		</div>
 
+		<div id="back-to-notebooks-button-div">
+			<button id="back-to-notebooks-button"> Back to Notebooks</button>
+		</div>
 
+		<h1 id="name"></h1>
+
+
+		<div id="note-field-and-notes">
+
+			<div id="text-box-and-button">
+
+				<div id="note-field-div">
+					<textarea id="note-field"></textarea>
+				</div>
+	
+				<div id="new-note-button-div">
+					<button id="new-note-button">Add Note</button>
+				</div>
+	
+			</div>
+	
+			<div id="all-notes-div">
+	
+			</div>
+	
+			
+	
+			<div>
+				<p id="current-page"></p>
+			</div>
+
+		</div>
+		<div id="nav-cluster-div">
+	
+			<button id="previous-page-button"><--</button>
+			<button id="next-page-button">--></button>
+
+		</div>
+
+		
 	</body>
 
 

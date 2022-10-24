@@ -21,6 +21,7 @@ class Notebook(db.Model):
 	user_id = db.Column(db.String, nullable=False)
 	name = db.Column(db.String, nullable=False)
 	created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+	
 
 class Note(db.Model):
 
