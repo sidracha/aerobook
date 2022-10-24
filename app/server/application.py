@@ -1,3 +1,4 @@
+from email.mime import application
 from flask import Flask, redirect, render_template, url_for, session, request, Blueprint, jsonify, abort, json
 import json
 from authlib.integrations.flask_client import OAuth
@@ -7,23 +8,27 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 
-app = Flask(__name__,
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
+application = Flask(__name__,
 					template_folder="../frontend/templates",
 					static_folder="../frontend/static")
-CORS(app)
+CORS(application)
 
-app.secret_key = os.getenv("APP_SECRET_KEY")
-app.config['SESSION_COOKIE_NAME'] = 'google-login-session'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
+application.secret_key = APP_SECRET_KEY
+application.config['SESSION_COOKIE_NAME'] = 'google-login-session'
+application.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
 
-print(os.getenv("SQLALCHEMY_DATABASE_URI"))
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+application.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from models import db
 
-db.init_app(app)
-with app.app_context():
+db.init_app(application)
+with application.app_context():
 	db.create_all()
 
 # oAuth Setup
@@ -46,30 +51,29 @@ import notebooks
 import notes
 
 
-@app.route("/")
+@application.route("/")
 def handle_home():
 	if "profile" in session:
 		return redirect("/display/notebooks")
 	return render_template("home.html")
 
-@app.route("/display/notebooks")
+@application.route("/display/notebooks")
 @login_required
 def handle_display():
 	email = session["profile"]["email"]
 	return render_template("books.html")
 
-@app.route("/user")
+@application.route("/user")
 @login_required
 def handle_user():
 	return jsonify({"email": session["profile"]["email"], "profile_pic": session["profile"]["picture"]})
 
 
-@app.route("/notebook/<name>", methods=["POST"])
+@application.route("/notebook/<name>", methods=["POST"])
 @login_required
 def handle_notebook_post(name):
 	user_id = session["profile"]["user_id"]
 	max_notebooks = 10
-	#max_notebooks = int(os.getenv("MAX_NOTEBOOKS"))
 	
 	notebook_obj = notebooks.create_new_notebook(user_id, name, max_notebooks)
 	if bool(notebook_obj) == False:
@@ -78,7 +82,7 @@ def handle_notebook_post(name):
 	return jsonify(notebook_obj)
 
 
-@app.route("/notebooks", methods=["GET"])
+@application.route("/notebooks", methods=["GET"])
 @login_required
 def handle_notebooks_get():
 	user_id = session["profile"]["user_id"]
@@ -86,14 +90,14 @@ def handle_notebooks_get():
 
 	return jsonify({"notebooks": notebooks_arr})
 
-@app.route("/notebook/<notebook_id>", methods=["DELETE"])
+@application.route("/notebook/<notebook_id>", methods=["DELETE"])
 @login_required
 def handle_notebook_delete(notebook_id):
 	notebooks.delete_notebook(notebook_id)
 	return "deleted notebook"
 
 
-@app.route("/notebook/<notebook_id>/note", methods=["POST"])
+@application.route("/notebook/<notebook_id>/note", methods=["POST"])
 @login_required
 def handle_note_post(notebook_id):
 	print("here!!!!!!!!")
@@ -105,23 +109,22 @@ def handle_note_post(notebook_id):
 	return jsonify({"note": note_obj, "count": count})
 
 
-@app.route("/notebook/<notebook_id>/notes", methods=["GET"])
+@application.route("/notebook/<notebook_id>/notes", methods=["GET"])
 @login_required
 def handle_notes_get(notebook_id):
 	args = request.args
 	notes_arr = notes.get_notes(notebook_id, int(args["limit"]), int(args["offset"]))
 	return jsonify({"notes": notes_arr})
 
-@app.route("/notebook/<notebook_id>/note/<note_id>", methods=["DELETE"])
+@application.route("/notebook/<notebook_id>/note/<note_id>", methods=["DELETE"])
 @login_required
 def handle_note_delete(notebook_id, note_id):
 	notes.delete_note(note_id, notebook_id)
 	return "deleted note"
 
 
-@app.route("/display/<notebook_id>")
+@application.route("/display/<notebook_id>")
 @login_required
-
 def handle_display_nbid(notebook_id):
 
 	#check if notebook exists otherwise redirect
@@ -129,17 +132,17 @@ def handle_display_nbid(notebook_id):
 		return redirect("/display/notfound")
 	return render_template("notebook.html")
 
-@app.route("/display/notfound")
+@application.route("/display/notfound")
 def handle_notfound():
 	return render_template("notfound.html")
 
-@app.route("/notebook/<notebook_id>/count")
+@application.route("/notebook/<notebook_id>/count")
 @login_required
 def handle_count_notes(notebook_id):
 	count = notes.get_note_count(notebook_id)
 	return jsonify({"count": count})
 
-@app.route("/notebook/<notebook_id>/name")
+@application.route("/notebook/<notebook_id>/name")
 @login_required
 def handle_notebook_name(notebook_id):
 	name = notebooks.get_name(notebook_id)
@@ -147,13 +150,13 @@ def handle_notebook_name(notebook_id):
 	return jsonify({"name": name})
 
 
-@app.route("/session")
+@application.route("/session")
 @login_required
 def handle_session():
 	return session["profile"]
 
 
-@app.route("/test")
+@application.route("/test")
 @login_required
 def handle_test():
 	count = notebooks.get_notebooks_count(session["profile"]["user_id"])
@@ -161,11 +164,11 @@ def handle_test():
 
 
 # google login stuff
-oauth = OAuth(app)
+oauth = OAuth(application)
 google = oauth.register(
 	name='google',
-	client_id=os.getenv("GOOGLE_CLIENT_ID"),
-	client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+	client_id=GOOGLE_CLIENT_ID,
+	client_secret=GOOGLE_CLIENT_SECRET,
 	access_token_url='https://accounts.google.com/o/oauth2/token',
 	access_token_params=None,
 	authorize_url='https://accounts.google.com/o/oauth2/auth',
@@ -176,21 +179,21 @@ google = oauth.register(
 	jwks_uri='https://www.googleapis.com/oauth2/v3/certs'
 )
 
-@app.route('/google-login')
+@application.route('/google-login')
 def login_google():
 	google = oauth.create_client('google')  # create the google oauth client
 	redirect_uri = url_for('authorize', _external=True)
 	return google.authorize_redirect(redirect_uri)
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
 	for key in list(session.keys()):
 		session.pop(key)
 	return redirect('/')
 
 
-@app.route('/authorize')
+@application.route('/authorize')
 def authorize():
 	google = oauth.create_client('google')  # create the google oauth client
 	token = google.authorize_access_token()  # Access token from google (needed to get user info)
@@ -209,6 +212,3 @@ def authorize():
 
 	return redirect('/display/notebooks')
 
-
-if __name__ == "__main":
-	app.run()
