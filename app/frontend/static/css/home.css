@@ -1,0 +1,42 @@
+#page-div {
+	width: 70%;
+	height: 100vh;
+	background-color: rgb(207, 229, 192);
+	margin: auto;
+}
+
+#google-login-button {
+	color: rebeccapurple;
+}
+
+#login-div {
+	float: right;
+}
+
+#content-div {
+	display: flex;
+	flex-direction: column;
+	margin-left: 150px;
+}
+
+#intro-div {
+	text-align: center;
+}
+
+#jixiao-productions-div {
+	text-align: center;
+	padding: 40px;
+}
+
+#jixiao-productions-anchor {
+	color: blueviolet;
+	font-size: 30px;
+}
+
+#github-button {
+	background-image: url(https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png);
+	background-size: 80px 50px;
+	width: 80px;
+	height: 50px;
+	border-radius: 50%;
+}

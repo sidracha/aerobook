@@ -8,13 +8,14 @@
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="../static/js/home.js"></script>
+		<link href="../static/css/home.css" rel="stylesheet">
 
 
 		<script>
 
 			$(document).ready(function() {
 
-				home.handle_google_login_click();
+				home.handle_github_button_click();
 
 			})
 
@@ -24,13 +25,55 @@
 
 	<body background="https://images.pexels.com/photos/775201/pexels-photo-775201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
 		
-		<h3>This is this HOME PAGE!</h3>
+		<div id="page-div">
+			<div id="login-div">
+				<div class="col s12 m6 offset-m3 center-align">
+					<a class="oauth-container btn darken-4 white black-text" href="/google-login" style="text-transform:none">
+						<div class="left">
+							<img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+								src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+						</div>
+						Login with Google
+					</a>
+				</div>
+				
+				<!-- Compiled and minified CSS -->
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+				
+				<!-- Compiled and minified JavaScript -->
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
-		<button id="google-login-button">Login With Google</button>
+			</div>
 
-		<div id="content-div">
+			<div id="content-div">
 
-			<h3>Hello</h3>
+				<div id="intro-div">
+					<h4>Welcome to Aerobook</h4>
+
+					<p>Simple online notebook, can write down notes and thoughts</p>
+
+					<div id="info-div">
+						<div class="col s12 m6 offset-m3 center-align">
+							<a class="oauth-container btn darken-4 white black-text" href="https://github.com/sidsail/aerobook" style="text-transform:none">
+								<div class="left">
+									<img width="20px" style="margin-top:7px; margin-right:8px" alt="github-img" 
+										src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+								</div>
+								Github
+							</a>
+						</div>
+						
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+						<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+					</div>
+				</div>
+
+				<div id="jixiao-productions-div">
+					<a href="https://www.jixiaoproductions.com" id="jixiao-productions-anchor">Check out Jixiao Productions</a>
+				</div>
+
+			</div>
+
 
 		</div>
 	</body>
